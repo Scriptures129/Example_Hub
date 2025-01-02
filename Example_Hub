@@ -1,0 +1,71 @@
+-- Load the Fluent UI library
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+
+-- Create the main window
+local MainWindow = Fluent:CreateWindow({
+    Title = "Blox Fruits Script",
+    Theme = "Dark", -- Options: "Dark", "Light"
+    Width = 400,
+    Height = 300,
+    Resizable = true
+})
+
+-- Create a farming section
+local FarmingTab = MainWindow:AddTab("Farming")
+
+-- Add auto farm toggle
+local AutoFarmToggle = FarmingTab:AddToggle({
+    Name = "Auto Farm",
+    Default = false,
+    Callback = function(state)
+        _G.AutoFarm = state
+        if state then
+            StartAutoFarm()
+        else
+            StopAutoFarm()
+        end
+    end
+})
+
+-- Add dropdown for selecting mobs
+local MobsDropdown = FarmingTab:AddDropdown({
+    Name = "Select Mob",
+    Options = {"Bandit", "Gorilla", "Pirate"},
+    Default = "Bandit",
+    Callback = function(selected)
+        _G.SelectedMob = selected
+    end
+})
+
+-- Function for starting auto farm
+function StartAutoFarm()
+    while _G.AutoFarm do
+        local Mob = GetClosestMob(_G.SelectedMob)
+        if Mob then
+            TeleportTo(Mob.Position)
+            AttackMob(Mob)
+        end
+        wait(1)
+    end
+end
+
+-- Function for stopping auto farm
+function StopAutoFarm()
+    _G.AutoFarm = false
+end
+
+-- Utility functions (to be implemented)
+function GetClosestMob(mobType)
+    -- Logic for finding the closest mob of the selected type
+end
+
+function TeleportTo(position)
+    -- Logic for teleporting the player to the position
+end
+
+function AttackMob(mob)
+    -- Logic for attacking the mob
+end
+
+-- Run the UI
+MainWindow:Show()
